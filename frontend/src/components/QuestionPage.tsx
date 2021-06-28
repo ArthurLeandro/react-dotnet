@@ -6,6 +6,7 @@ import { Page } from "./Page";
 import { useState } from 'react';
 import { getQuestion } from "../data/questions";
 import { Fragment } from "react";
+import { AnswerList } from "./AnswerList";
 
 interface RouteParams {
 	questionId:string;
@@ -32,6 +33,7 @@ export const QuestionPage:FC<RouteComponentProps<RouteParams>> = ({match}) => {
 					${question?.created.toLocaleDateString()}
 					${question?.created.toLocaleTimeString()}`}
 					</div>
+					<AnswerList data={question ? question.answers : undefined}/>
 				</Fragment>
 			</Page>
 	);
