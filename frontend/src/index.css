@@ -180,7 +180,7 @@ body {
 }
 
 .page {
-	margin: 50px auto 20px auto;
+	margin: 6rem auto 20px auto;
 	padding: 30px 20px;
 	max-width: 600px;
 }
@@ -196,4 +196,24 @@ body {
 .home__loading {
 	font-size: var(--fontSize);
 	font-style: italic;
+}
+
+.question-page__card {
+	background-color: white;
+	padding: 15px 20px 20px 20px;
+	border-radius: 4px;
+	border: 1px solid var(--gray6);
+	box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.16);
+}
+
+.question-page__title {
+	font-size: 19px;
+	font-weight: bold;
+	margin: 10px 0px 5px;
+}
+
+.question-page__asked {
+	font-size: 12px;
+	font-style: italic;
+	color: var(--gray3);
 }

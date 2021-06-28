@@ -3,10 +3,11 @@ import { FC } from "react";
 
 interface Props{
 	title?:string;
+	titleClass?:string;
 }
 
-export const PageTitle:FC<Props> = ({title}) =>(
+export const PageTitle:FC<Props> = ({title,titleClass}) =>(
 	<div> 
-		<h2 className="page-title__title">{title}</h2>
+		<h2 className={titleClass ? titleClass:"page-title__title"} >{title}</h2>
 	</div>
 );
