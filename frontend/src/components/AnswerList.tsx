@@ -14,7 +14,7 @@ export const AnswerList:FC<Props> = ({data})=>{
 				<li className="answer-list" key={answer.answerId}>
 					<Answer data={answer}/>
 				</li>
-			)) : <li>No responses yet ...</li>}
+			)) : <li>Loading responses ...</li>}
 		</ul>
 	);
 }
