@@ -72,6 +72,11 @@ export const clearPostedQuestionActionCreator: ActionCreator<
 	return postedQuestionAction;
 };
 
+const initialQuestionState: QuestionState = {
+	loading: false,
+	unanswered: null
+}
+
 const questionReducer: Reducer<QuestionState, QuestionsActions> = (state = initialQuestionState, action) => {
 	switch (action.type) {
 		case 'GettingUnansweredQuestions': {
@@ -116,10 +121,6 @@ type QuestionsActions =
 	| GotUnansweredQuestionsAction
 	| PostedQuestionAction;
 
-const initialQuestionState: QuestionState = {
-	loading: false,
-	unanswered: null
-}
 
 export function configureStore(): Store<AppState> {
 	const store = createStore(
