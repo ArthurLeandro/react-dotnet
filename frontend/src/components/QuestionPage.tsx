@@ -7,6 +7,8 @@ import { useState } from 'react';
 import { getQuestion } from "../data/questions";
 import { Fragment } from "react";
 import { AnswerList } from "./AnswerList";
+import { Form } from "./Form";
+import { Field } from "./Field";
 
 interface RouteParams {
 	questionId:string;
@@ -34,6 +36,11 @@ export const QuestionPage:FC<RouteComponentProps<RouteParams>> = ({match}) => {
 					${question?.created.toLocaleTimeString()}`}
 					</div>
 					<AnswerList data={question ? question.answers : undefined}/>
+					<div className="question-form">
+						<Form submitCaption="Submit your answer">
+							<Field name="content" label="Your Answer" type="TextArea"/>
+						</Form>
+					</div>
 				</Fragment>
 			</Page>
 	);

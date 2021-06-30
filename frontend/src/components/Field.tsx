@@ -9,15 +9,26 @@ interface Props{
 }
 
 export const Field:FC<Props> = ({name,label, type='Text'})=>{
-	const {setValue} = useContext(FormContext);
+	const {setValue,touched,validate, setTouched} = useContext(FormContext);
 	const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>	) =>{
 		if(setValue){
 			setValue(name, e.target.value);
 		}
+		if(touched[name] && validate){
+			validate(name);
+		}
+	};
+	const handleBlur = () =>{
+		if(setTouched){
+			setTouched(name);
+			if(validate){
+				validate(name);
+			}
+		}	
 	};
 	return(
 		<FormContext.Consumer>
-			{({values})=> (
+			{({values, errors})=> (
 				<div className="label-field__base">
 					{label &&(
 						<label htmlFor={name}> 
@@ -33,6 +44,7 @@ export const Field:FC<Props> = ({name,label, type='Text'})=>{
 								values[name] === undefined ? '' : values[name]
 							}
 							onChange={handleChange}
+							onBlur={handleBlur}
 							className="input-field" 
 						/>
 					)}
@@ -43,9 +55,15 @@ export const Field:FC<Props> = ({name,label, type='Text'})=>{
 								values[name] === undefined ? '' : values[name]
 							}
 							onChange={handleChange}
-							className="input-field input-field__textarea"
+							onBlur={handleBlur}
+							className="input-field__textarea input-field "
 						/>
 					)}
+					{errors[name] && errors[name].length>0 && errors[name].map(error=>(
+						<div className="input-error">
+							{error}
+						</div>
+					))}
 				</div>
 			)}
 		</FormContext.Consumer>
