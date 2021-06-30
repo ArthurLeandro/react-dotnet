@@ -4,10 +4,10 @@ import { RouteComponentProps } from "react-router-dom";
 import { QuestionData } from "../interface/QuestionData";
 import { Page } from "./Page";
 import { useState } from 'react';
-import { getQuestion } from "../data/questions";
+import { getQuestion, postAnswer } from '../data/questions';
 import { Fragment } from "react";
 import { AnswerList } from "./AnswerList";
-import { Form } from "./Form";
+import { Form, minLength, required, Values } from './Form';
 import { Field } from "./Field";
 
 interface RouteParams {
@@ -26,6 +26,15 @@ export const QuestionPage:FC<RouteComponentProps<RouteParams>> = ({match}) => {
 			getQuestionAsync(questionId);
 		}
 	}, [match.params.questionId]);
+	const handleSubmit = async(values:Values)=>{
+		const result = await postAnswer({
+			questionId: question!.questionId,
+			content: values.content,
+			userName: 'Fred',
+			created: new Date()
+		});
+		return { success: result ? true : false };
+	};
   return(
 			<Page page="page question-page__card" titleClass="question-page__title" title={question === null ? '' : question.title} > 
 				<Fragment>
@@ -37,7 +46,17 @@ export const QuestionPage:FC<RouteComponentProps<RouteParams>> = ({match}) => {
 					</div>
 					<AnswerList data={question ? question.answers : undefined}/>
 					<div className="question-form">
-						<Form submitCaption="Submit your answer">
+						<Form submitCaption="Submit your answer"
+							validationRules={{
+								content:[
+									{validator:required},
+									{validator:minLength,arg:50}
+								]
+							}}
+							onSubmit={handleSubmit}
+							failureMessage="There was a problem with your answer"
+							successMessage="Your answer was successfully submitted"
+						>
 							<Field name="content" label="Your Answer" type="TextArea"/>
 						</Form>
 					</div>
