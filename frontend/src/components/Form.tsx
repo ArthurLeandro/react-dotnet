@@ -57,12 +57,13 @@ export const minLength:Validator = ( value:any, length:number):string =>{
 interface Props{
 	submitCaption?:string;
 	validationRules?:ValidationProp;
-	onSubmit:(values:Values)=>Promise<SubmitResult>;
+	onSubmit:(values:Values)=>Promise<SubmitResult> | void;
+	submitResult?: SubmitResult;
 	successMessage?:string;
 	failureMessage?:string;
 }
 
-export const Form:FC<Props> = ({submitCaption, children, validationRules, onSubmit, successMessage='Success', failureMessage='Something went wrong'}) => {
+export const Form:FC<Props> = ({submitCaption, children, validationRules, onSubmit, submitResult, successMessage='Success', failureMessage='Something went wrong'}) => {
 	const [values, setValues] = useState<Values>({});
 	const[errors, setErrors] = useState<Errors>({});
 	const[touched, setTouched] = useState<Touched>({});
@@ -89,6 +90,8 @@ export const Form:FC<Props> = ({submitCaption, children, validationRules, onSubm
 			setSubmitting(true);
 			setSubmitError(false);
 			const result = await onSubmit(values);
+			if(result === undefined)
+				return;
 			setErrors(result.errors || {});
 			setSubmitError(!result.success);
 			setSubmitting(false);
@@ -110,6 +113,9 @@ export const Form:FC<Props> = ({submitCaption, children, validationRules, onSubm
 		setErrors(newErrors);
 		return fieldErrors;
 	};
+	const disabled = submitResult? submitResult.success : submitting || (submitted && !submitError);
+	const showError = submitResult? !submitResult.success: submitted && submitError;
+	const showSuccess = submitResult? submitResult.success: submitted && !submitError;
 	return (
 		<FormContext.Provider
 			value={{
@@ -127,21 +133,21 @@ export const Form:FC<Props> = ({submitCaption, children, validationRules, onSubm
 		>
 			<form noValidate={true} onSubmit={handleSubmit}>
 				<fieldset className="form-field"
-					disabled={submitting ||(submitted && !submitError)}
+					disabled={disabled}
 				>
 				{children}
 				<div className="form-background-field">
 						<button className="primary-button" type="submit">{submitCaption}</button>
-						{submitted && submitError && (
+						{showError && 
 							<p className="form-message__failure">
 								{failureMessage}
 							</p>
-						)}
-						{submitted && !submitError && (
+						}
+						{showSuccess	&&	
 							<p className="form-message__success">
 								{successMessage}
 							</p>
-						)}
+						}
 				</div>
 				</fieldset>
 			</form>

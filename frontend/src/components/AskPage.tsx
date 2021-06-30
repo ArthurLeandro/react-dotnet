@@ -1,19 +1,42 @@
 /* eslint-disable prettier/prettier */
 import { Page } from "./Page";
-import { lazy,Suspense } from 'react';
+import { FC, lazy,Suspense,useEffect } from 'react';
 import { Route } from "react-router-dom";
-import { Form, required, minLength, Values } from './Form';
+import { Form, required, minLength, Values, SubmitResult } from './Form';
 import { Field } from './Field';
-import { postQuestion } from '../data/questions';
+import { postQuestion, PostQuestionData } from '../data/questions';
+import { QuestionData } from "../interface/QuestionData";
+import { connect } from "react-redux";
+import { AnyAction } from "redux";
+import { ThunkDispatch } from "redux-thunk";
+import { AppState, postQuestionActionCreator, clearPostedQuestionActionCreator } from "../store/Store";
 
-const AskPage = () => {
-	const handleSubmit = async(values:Values)=>{
-		const question = await postQuestion({title: values.title,
+interface Props {
+postQuestion: (
+	question: PostQuestionData,
+	) => Promise<void>;
+	postedQuestionResult?: QuestionData;
+	clearPostedQuestion: () => void;
+}
+
+const AskPage:FC<Props> = ({postQuestion,postedQuestionResult,clearPostedQuestion}) => {
+	useEffect(()=>{
+		return function cleanUp(){
+			clearPostedQuestion();
+		};
+	},[clearPostedQuestion]);
+	const handleSubmit = (values:Values)=>{
+		postQuestion({
+			title: values.title,
 			content: values.content,
-			userName: 'Fred',
-			created: new Date()});
-			return {success:question?true:false};
+			userName: "Fred",
+			created: new Date()
+		});
 	};
+	let submitResult: SubmitResult | undefined;
+		if (postedQuestionResult) {
+			submitResult = { success: postedQuestionResult !== undefined };
+	}
 	return (
 		<Page title="Ask a question">
 			<Form submitCaption="Submit Your Question" validationRules={{
@@ -27,6 +50,7 @@ const AskPage = () => {
 				],
 			}}
 				onSubmit={handleSubmit}
+				submitResult={submitResult}
 				failureMessage="There was a problem with your question"
 				successMessage="Your question was successfully submitted"
 			>
@@ -37,4 +61,19 @@ const AskPage = () => {
 		);
 };
 
-export default AskPage;
+const mapStateToProps = (store: AppState) => {
+	return { postedQuestionResult: store.questions.postedResult,};
+};
+const mapDispatchToProps = ( dispatch: ThunkDispatch<any, any, AnyAction>,) => {
+	return {
+		postQuestion: (question: PostQuestionData) =>
+		dispatch(postQuestionActionCreator(question)),
+		clearPostedQuestion: () =>
+		dispatch(clearPostedQuestionActionCreator()),
+	};
+};
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps,
+)(AskPage);
+
