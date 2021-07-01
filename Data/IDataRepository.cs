@@ -9,8 +9,8 @@ public interface IDataRepository
 	QuestionGetSingleResponse GetQuestion(int questionId);
 	bool QuestionExists(int questionId);
 	AnswerGetResponse GetAnswer(int answerId);
-	QuestionGetSingleResponse PostQuestion(QuestionPostRequest question);
+	QuestionGetSingleResponse PostQuestion(QuestionPostFullRequest question);
 	QuestionGetSingleResponse PutQuestion(int quesitonId, QuestionPutRequest quesiton);
 	void DeleteQuestion(int questionId);
-	AnswerGetResponse PostAnswer(AnswerPostRequest answer);
+	AnswerGetResponse PostAnswer(AnswerPostFullRequest answer);
 }

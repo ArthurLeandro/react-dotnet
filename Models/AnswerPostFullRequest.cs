@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-public class AnswerPostRequest
+public class AnswerPostFullRequest
 {
 	[Required]
 	public int? QuestionId { get; set; }
@@ -8,5 +8,5 @@ public class AnswerPostRequest
 	public string Content { get; set; }
 	public string UserId { get; set; }
 	public string UserName { get; set; }
-	public System.DateTime Created { get; set; }
+	public DateTime Created { get; set; }
 }

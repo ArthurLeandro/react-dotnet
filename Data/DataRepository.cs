@@ -73,7 +73,7 @@ public class DataRepository : IDataRepository
 		}
 	}
 
-	public AnswerGetResponse PostAnswer(AnswerPostRequest answer)
+	public AnswerGetResponse PostAnswer(AnswerPostFullRequest answer)
 	{
 		using (var connection = new SqlConnection(m_connectionString))
 		{
@@ -82,7 +82,7 @@ public class DataRepository : IDataRepository
 		}
 	}
 
-	public QuestionGetSingleResponse PostQuestion(QuestionPostRequest question)
+	public QuestionGetSingleResponse PostQuestion(QuestionPostFullRequest question)
 	{
 		using (var connection = new SqlConnection(m_connectionString))
 		{
