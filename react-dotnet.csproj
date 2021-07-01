@@ -13,6 +13,7 @@
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.90" />
     <PackageReference Include="DbUp" Version="4.5.0" />
+    <PackageReference Include="dbup-postgresql" Version="4.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.5" />
   </ItemGroup>
 

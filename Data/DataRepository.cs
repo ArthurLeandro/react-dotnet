@@ -19,7 +19,7 @@ public class DataRepository : IDataRepository
 		using (var connection = new SqlConnection(m_connectionString))
 		{
 			connection.Open();
-			connection.Execute(@"EXEC dbo.Question_Delete @QuestionId = @QuestionId", new { QuestionId = questionId });
+			connection.Execute(@"EXEC Question_Delete @QuestionId = @QuestionId", new { QuestionId = questionId });
 		}
 	}
 
@@ -28,7 +28,7 @@ public class DataRepository : IDataRepository
 		using (var connection = new SqlConnection(m_connectionString))
 		{
 			connection.Open();
-			return connection.QueryFirstOrDefault<AnswerGetResponse>(@"EXEC dbo.Answer_Get_ByAnswerId @AnswerId = @AnswerId", new { AnswerId = answerId });
+			return connection.QueryFirstOrDefault<AnswerGetResponse>(@"EXEC Answer_Get_ByAnswerId @AnswerId = @AnswerId", new { AnswerId = answerId });
 		}
 	}
 
@@ -37,9 +37,9 @@ public class DataRepository : IDataRepository
 		using (var connection = new SqlConnection(m_connectionString))
 		{
 			connection.Open();
-			var question = connection.QueryFirstOrDefault<QuestionGetSingleResponse>(@"EXEC dbo.Question_GetSingle @QuestionId = @QuestionId", new { QuestionId = questionId });
+			var question = connection.QueryFirstOrDefault<QuestionGetSingleResponse>(@"EXEC Question_GetSingle @QuestionId = @QuestionId", new { QuestionId = questionId });
 			if (question != null)
-				question.Answers = connection.Query<AnswerGetResponse>(@"EXEC dbo.Answer_Get_ByQuestionId @QuestionId = @QuestionId", new { QuestionId = questionId });
+				question.Answers = connection.Query<AnswerGetResponse>(@"EXEC Answer_Get_ByQuestionId @QuestionId = @QuestionId", new { QuestionId = questionId });
 			return question;
 		}
 	}
@@ -49,7 +49,7 @@ public class DataRepository : IDataRepository
 		using (var connection = new SqlConnection(m_connectionString))
 		{
 			connection.Open();
-			return connection.Query<QuestionGetManyResponse>(@"EXEC dbo.Question_GetMany");
+			return connection.Query<QuestionGetManyResponse>(@"EXEC Question_GetMany");
 		}
 	}
 
@@ -58,7 +58,7 @@ public class DataRepository : IDataRepository
 		using (var connection = new SqlConnection(m_connectionString))
 		{
 			connection.Open();
-			return connection.Query<QuestionGetManyResponse>(@"EXEC dbo.Question_GetMany_BySearch @Search = @Search", new { Search = search });
+			return connection.Query<QuestionGetManyResponse>(@"EXEC Question_GetMany_BySearch @Search = @Search", new { Search = search });
 		}
 	}
 
@@ -68,7 +68,7 @@ public class DataRepository : IDataRepository
 		{
 			connection.Open();
 			return connection.Query<QuestionGetManyResponse>(
-			"EXEC dbo.Question_GetUnanswered"
+			"EXEC Question_GetUnanswered"
 			);
 		}
 	}
@@ -78,7 +78,7 @@ public class DataRepository : IDataRepository
 		using (var connection = new SqlConnection(m_connectionString))
 		{
 			connection.Open();
-			return connection.QueryFirst<AnswerGetResponse>(@"EXEC dbo.Answer_Post @QuestionId = @QuestionId, @Content = @Content, @UserId = @UserId, @UserName = @UserName, @Created = @Created", answer);
+			return connection.QueryFirst<AnswerGetResponse>(@"EXEC Answer_Post @QuestionId = @QuestionId, @Content = @Content, @UserId = @UserId, @UserName = @UserName, @Created = @Created", answer);
 		}
 	}
 
@@ -87,7 +87,7 @@ public class DataRepository : IDataRepository
 		using (var connection = new SqlConnection(m_connectionString))
 		{
 			connection.Open();
-			var questionId = connection.QueryFirst<int>(@"EXEC dbo.Question_Post @Title = @Title, @Content = @Content, @UserId = @UserId, @UserName = @UserName, @Created = @Created", question);
+			var questionId = connection.QueryFirst<int>(@"EXEC Question_Post @Title = @Title, @Content = @Content, @UserId = @UserId, @UserName = @UserName, @Created = @Created", question);
 			return GetQuestion(questionId);
 		}
 	}
@@ -97,7 +97,7 @@ public class DataRepository : IDataRepository
 		using (var connection = new SqlConnection(m_connectionString))
 		{
 			connection.Open();
-			connection.Execute(@"EXEC dbo.Question_Put @QuestionId = @QuestionId, @Title = @Title, @Content = @Content", new { QuestionId = questionId, question.Title, question.Content });
+			connection.Execute(@"EXEC Question_Put @QuestionId = @QuestionId, @Title = @Title, @Content = @Content", new { QuestionId = questionId, question.Title, question.Content });
 			return GetQuestion(questionId);
 		}
 	}
@@ -107,7 +107,7 @@ public class DataRepository : IDataRepository
 		using (var connection = new SqlConnection(m_connectionString))
 		{
 			connection.Open();
-			return connection.QueryFirst<bool>(@"EXEC dbo.Question_Exists @QuestionId = @QuestionId", new { QuestionId = questionId });
+			return connection.QueryFirst<bool>(@"EXEC Question_Exists @QuestionId = @QuestionId", new { QuestionId = questionId });
 		}
 	}
 }
