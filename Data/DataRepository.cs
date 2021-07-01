@@ -16,7 +16,7 @@ public class DataRepository : IDataRepository
 
 	public void DeleteQuestion(int questionId)
 	{
-		using (var connection = new SqlConnection(_connectionString))
+		using (var connection = new SqlConnection(m_connectionString))
 		{
 			connection.Open();
 			connection.Execute(@"EXEC dbo.Question_Delete @QuestionId = @QuestionId", new { QuestionId = questionId });
@@ -25,7 +25,7 @@ public class DataRepository : IDataRepository
 
 	public AnswerGetResponse GetAnswer(int answerId)
 	{
-		using (var connection = new SqlConnection(_connectionString))
+		using (var connection = new SqlConnection(m_connectionString))
 		{
 			connection.Open();
 			return connection.QueryFirstOrDefault<AnswerGetResponse>(@"EXEC dbo.Answer_Get_ByAnswerId @AnswerId = @AnswerId", new { AnswerId = answerId });
@@ -34,7 +34,7 @@ public class DataRepository : IDataRepository
 
 	public QuestionGetSingleResponse GetQuestion(int questionId)
 	{
-		using (var connection = new SqlConnection(_connectionString))
+		using (var connection = new SqlConnection(m_connectionString))
 		{
 			connection.Open();
 			var question = connection.QueryFirstOrDefault<QuestionGetSingleResponse>(@"EXEC dbo.Question_GetSingle @QuestionId = @QuestionId", new { QuestionId = questionId });
@@ -64,7 +64,7 @@ public class DataRepository : IDataRepository
 
 	public IEnumerable<QuestionGetManyResponse> GetUnansweredQuestions()
 	{
-		using (var connection = new SqlConnection(_connectionString))
+		using (var connection = new SqlConnection(m_connectionString))
 		{
 			connection.Open();
 			return connection.Query<QuestionGetManyResponse>(
@@ -75,7 +75,7 @@ public class DataRepository : IDataRepository
 
 	public AnswerGetResponse PostAnswer(AnswerPostRequest answer)
 	{
-		using (var connection = new SqlConnection(_connectionString))
+		using (var connection = new SqlConnection(m_connectionString))
 		{
 			connection.Open();
 			return connection.QueryFirst<AnswerGetResponse>(@"EXEC dbo.Answer_Post @QuestionId = @QuestionId, @Content = @Content, @UserId = @UserId, @UserName = @UserName, @Created = @Created", answer);
@@ -84,7 +84,7 @@ public class DataRepository : IDataRepository
 
 	public QuestionGetSingleResponse PostQuestion(QuestionPostRequest question)
 	{
-		using (var connection = new SqlConnection(_connectionString))
+		using (var connection = new SqlConnection(m_connectionString))
 		{
 			connection.Open();
 			var questionId = connection.QueryFirst<int>(@"EXEC dbo.Question_Post @Title = @Title, @Content = @Content, @UserId = @UserId, @UserName = @UserName, @Created = @Created", question);
@@ -94,7 +94,7 @@ public class DataRepository : IDataRepository
 
 	public QuestionGetSingleResponse PutQuestion(int questionId, QuestionPutRequest question)
 	{
-		using (var connection = new SqlConnection(_connectionString))
+		using (var connection = new SqlConnection(m_connectionString))
 		{
 			connection.Open();
 			connection.Execute(@"EXEC dbo.Question_Put @QuestionId = @QuestionId, @Title = @Title, @Content = @Content", new { QuestionId = questionId, question.Title, question.Content });
@@ -104,7 +104,7 @@ public class DataRepository : IDataRepository
 
 	public bool QuestionExists(int questionId)
 	{
-		using (var connection = new SqlConnection(_connectionString))
+		using (var connection = new SqlConnection(m_connectionString))
 		{
 			connection.Open();
 			return connection.QueryFirst<bool>(@"EXEC dbo.Question_Exists @QuestionId = @QuestionId", new { QuestionId = questionId });
